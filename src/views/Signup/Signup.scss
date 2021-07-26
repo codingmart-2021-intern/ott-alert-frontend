@@ -1,0 +1,151 @@
+@import url("https://fonts.googleapis.com/css2?family=Merriweather:wght@300&display=swap");
+$inputBackground:  #333333;
+$diableBackground: #ddddddb9;
+$diableFontColor: #000000;
+.signup {
+  font-family: "Merriweather", serif;
+  background-image: url("../../assets/background.jpg");
+  background-size: cover;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  @media only screen and (min-width: 701px) {
+    .card {
+      margin-top:20px;
+      width: 30%;
+      padding: 35px 20px 10px 20px;
+      background: rgba(0, 0, 0, 0.7);
+    }
+  }
+  @media only screen and (max-width: 700px) {
+    .card {
+      width: 80%;
+      padding: 35px 20px 10px 20px;
+      background: rgba(0, 0, 0, 0.7);
+    }
+  }
+  .logo {
+    display: flex;
+    justify-content: center;
+  }
+  .imglogo {
+    max-height: 25%;
+    max-width: 25%;
+    margin-bottom: 10px;
+  }
+  input::placeholder {
+    text-transform: uppercase;
+  }
+  input[type="email"] {
+    margin: 10px 0px;
+    background-color: $inputBackground;
+    padding: 15px 8px;
+    color: white;
+    border: none;
+    &:disabled{
+      background-color: $diableBackground;
+      color: $diableFontColor;
+      font-weight: bold;
+    }
+  }
+  input[type="text"] {
+    background-color: $inputBackground;
+    margin: 10px 0px;
+    padding: 15px 8px;
+    color: white;
+    border: none;
+    &:disabled{
+      background-color: $diableBackground;
+      color: $diableFontColor;
+      font-weight: bold;
+    }
+  }
+  input[type="password"] {
+    background-color: $inputBackground;
+    margin: 10px 0px;
+    padding: 15px 8px;
+    color: white;
+    border: none;
+    &:disabled{
+      background-color: $diableBackground;
+      color: $diableFontColor;
+      font-weight: bold;
+    }
+  }
+  input[type="tel"] {
+    background-color: $inputBackground;
+    margin: 10px 0px;
+    padding: 15px 8px;
+    color: white;
+    border: none;
+    &:disabled{
+      background-color: $diableBackground;
+      color: $diableFontColor;
+      font-weight: bold;
+    }
+  }
+  input[type="submit"] {
+    cursor: pointer;
+    width: 80%;
+    display: flex;
+    margin: 0 auto;
+    margin-top: 20px;
+    justify-content: center;
+    background: #a766d6;
+    color: white;
+    margin-bottom: 20px;
+    &:disabled{
+      background-color: #beb8b81a;
+    }
+  }
+  .rotate-in-center:hover {
+    -webkit-animation: rotate-in-center 1.5s
+      cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite alternate-reverse both;
+    animation: rotate-in-center 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)
+      infinite alternate-reverse both;
+  }
+  .linktologin {
+    h5 {
+      text-decoration: none;
+      float: right;
+      color: white;
+      font-size: 12px;
+    }
+    cursor: pointer;
+  }
+  .register-header {
+    color: white;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  @-webkit-keyframes rotate-in-center {
+    0% {
+      -webkit-transform: rotate(-360deg);
+      transform: rotate(-360deg);
+      opacity: 0;
+    }
+    100% {
+      -webkit-transform: rotate(0);
+      transform: rotate(0);
+      opacity: 1;
+    }
+  }
+  @keyframes rotate-in-center {
+    0% {
+      -webkit-transform: rotate(-360deg);
+      transform: rotate(-360deg);
+      opacity: 0;
+    }
+    100% {
+      -webkit-transform: rotate(0);
+      transform: rotate(0);
+      opacity: 1;
+    }
+  }
+  .register-header {
+    color: white;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+}

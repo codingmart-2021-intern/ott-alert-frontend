@@ -1,0 +1,109 @@
+@import url("https://fonts.googleapis.com/css2?family=Merriweather:wght@300&display=swap");
+$inputBackground:  #333333;
+$diableBackground: #ddddddb9;
+$diableFontColor: #000000;
+$backGroundUrl: "https://www.qualitylogic.com/wp-content/uploads/2019/05/media-and-entertainment-banner.jpg";
+.userProfile {
+  font-family: "Merriweather", serif;
+  background: url($backGroundUrl);
+  background-size: 105% 100%;
+  background-repeat: no-repeat;
+  min-height: 95vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .profile-avatar{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    }
+
+  @media only screen and (min-width: 701px) {
+    .card {
+      margin-top:20px;
+      width: 30%;
+      padding: 35px 20px 10px 20px;
+      background: rgba(0, 0, 0, 0.7);
+    }
+  }
+  @media only screen and (max-width: 700px) {
+    .card {
+      width: 80%;
+      padding: 35px 20px 10px 20px;
+      background: rgba(0, 0, 0, 0.7);
+    }
+  }
+  .logo {
+    display: flex;
+    justify-content: center;
+  }
+  .imglogo {
+    max-height: 25%;
+    max-width: 25%;
+    margin-bottom: 10px;
+  }
+  .input{
+    margin: 10px 0px;
+    background-color: $inputBackground;
+    padding: 1rem .5rem;
+    color: white;
+    border: none;
+    &::placeholder{
+        text-transform: uppercase;
+    }
+    &:disabled{
+      background-color: $diableBackground;
+      color: $diableFontColor;
+      font-weight: bold;
+    }
+  }
+  .rotate-in-center:hover {
+    -webkit-animation: rotate-in-center 1.5s
+      cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite alternate-reverse both;
+    animation: rotate-in-center 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)
+      infinite alternate-reverse both;
+  }
+  .register-header {
+    color: white;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  @-webkit-keyframes rotate-in-center {
+    0% {
+      -webkit-transform: rotate(-360deg);
+      transform: rotate(-360deg);
+      opacity: 0;
+    }
+    100% {
+      -webkit-transform: rotate(0);
+      transform: rotate(0);
+      opacity: 1;
+    }
+  }
+  @keyframes rotate-in-center {
+    0% {
+      -webkit-transform: rotate(-360deg);
+      transform: rotate(-360deg);
+      opacity: 0;
+    }
+    100% {
+      -webkit-transform: rotate(0);
+      transform: rotate(0);
+      opacity: 1;
+    }
+  }
+  .register-header {
+    color: white;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  .cursorPointer{
+      cursor: pointer;
+  }
+}
+
+@media only screen and (max-width: 700px) {
+    .userProfile {
+        background-size: cover;
+    }
+}

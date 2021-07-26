@@ -1,0 +1,99 @@
+@import url("https://fonts.googleapis.com/css2?family=Merriweather:wght@300&display=swap");
+
+.login {
+  font-family: "Merriweather", serif;
+  background-image: url("../../assets/background.jpg");
+  height: 100vh;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  color:white;
+  h1{
+    color:white;
+  }
+  // Mobile view
+  @media only screen and (max-width: 700px) {
+    .si-form {
+      margin-left: 100px;
+      max-width: 300px;
+      padding: 16px;
+      background-color: rgba(0, 0, 0, 0.7);
+      border-radius: 3px;
+     
+    }
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin: 2px 0 10px 0;
+      border: none;
+      background: #f1f1f1;
+      border-radius: 5px;
+    }
+
+    input[type="email"]:focus,
+    input[type="password"]:focus {
+      background-color: #ddd;
+      outline: none;
+    }
+    .btn {
+      background-color: black;
+      margin-top: 10px;
+      color: white;
+      padding: 10px;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      opacity: 0.9;
+      border-radius: 5px;
+    }
+
+    .btn:hover {
+      opacity: 1;
+    }
+    
+  }
+
+  // Web view
+  @media only screen and (min-width: 701px) {
+    .si-form {
+      margin-left: 450px;
+      max-width: 450px;
+      padding: 40px;
+      background-color: rgba(0, 0, 0, 0.7);
+      border-radius: 3px;
+    }
+
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin: 5px 0 22px 0;
+      border: none;
+      background: #f1f1f1;
+      border-radius: 5px;
+    }
+
+    input[type="email"]:focus,
+    input[type="password"]:focus {
+      background-color: #ddd;
+      outline: none;
+    }
+
+    .btn {
+      background: #0a95d8;
+      margin-top: 10px;
+      color: white;
+      padding: 10px;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      opacity: 0.9;
+      border-radius: 5px;
+    }
+
+    .btn:hover {
+      opacity: 1;
+    }
+  }
+}

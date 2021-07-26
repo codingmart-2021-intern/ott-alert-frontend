@@ -1,0 +1,59 @@
+.header {
+  font-family: Arial, Helvetica, sans-serif;
+  width: 100vw;
+  padding: 5px 10px;
+  min-height: 5vh;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  color: white;
+  justify-content: space-between;
+  align-items: center;
+  .logout {
+    cursor: pointer;
+    margin-left: auto;
+    margin-right: 0;
+  }
+  .logo {
+    color: white;
+    font-weight: bold;
+  }
+  .imglogo {
+    height: 25%;
+    width: 25%;
+  }
+  .link {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+  }
+  .rotate-in-center:hover {
+    -webkit-animation: rotate-in-center 1.5s
+      cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite alternate-reverse both;
+    animation: rotate-in-center 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)
+      infinite alternate-reverse both;
+  }
+  @-webkit-keyframes rotate-in-center {
+    0% {
+      -webkit-transform: rotate(-360deg);
+      transform: rotate(-360deg);
+      opacity: 0;
+    }
+    100% {
+      -webkit-transform: rotate(0);
+      transform: rotate(0);
+      opacity: 1;
+    }
+  }
+  @keyframes rotate-in-center {
+    0% {
+      -webkit-transform: rotate(-360deg);
+      transform: rotate(-360deg);
+      opacity: 0;
+    }
+    100% {
+      -webkit-transform: rotate(0);
+      transform: rotate(0);
+      opacity: 1;
+    }
+  }
+}
