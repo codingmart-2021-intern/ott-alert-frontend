@@ -1,10 +1,12 @@
 import { React, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import Preloader from "../../components/Preloader/Preloader";
 import "./Signup.scss";
 import validationService from "../../service/Validation";
 import "./Signup.scss";
 import { toast } from "react-toastify";
+import axios from "axios";
+import { userserviceurl } from "../../service/url";
 
 function Signup() {
   const [userDetails, setUserDetails] = useState({
@@ -14,6 +16,7 @@ function Signup() {
     password: "",
     confirmPassword: "",
   });
+  let history = useHistory();
   const [errors, setErrors] = useState({
     username: "",
     email: "",
@@ -92,6 +95,7 @@ function Signup() {
     setUserDetails(user);
     validate();
   };
+
   const onSubmitHandler = async (e) => {
     e.preventDefault();
     validate();
@@ -152,8 +156,36 @@ function Signup() {
       }));
       return;
     }
-    console.log(userDetails);
+    siginRequest();
   };
+
+  const siginRequest = async () => {
+    console.log("Signing in");
+    const signupdetails = {
+      name: userDetails.username,
+      email: userDetails.email,
+      password: userDetails.password,
+      phoneNumber: userDetails.mobileno,
+    };
+    console.log(signupdetails);
+    setLoading(true);
+    await axios
+      .post(`${userserviceurl}/register`, signupdetails)
+      .then((res) => {
+        if (res.status === 201) {
+          setLoading(false);
+          toast.success("Registered Successfully");
+          history.push("/login");
+        }
+      })
+      .catch((err) => {
+        setLoading(false);
+        if (err.response.status === 403) {
+          toast.dark("Email Already Exist");
+        }
+      });
+  };
+
   let content;
   if (loading) {
     content = <Preloader />;
@@ -167,7 +199,7 @@ function Signup() {
               <form onSubmit={onSubmitHandler}>
                 <div className="form-group">
                   <input
-                    type="text"
+                    type="email"
                     className="form-control"
                     placeholder="Username"
                     name="username"
@@ -199,6 +231,7 @@ function Signup() {
                     className="form-control"
                     placeholder="MobileNo"
                     name="mobileno"
+                    maxLength="10"
                     value={userDetails.mobileno}
                     onChange={onChangeHandler}
                     autoComplete="off"

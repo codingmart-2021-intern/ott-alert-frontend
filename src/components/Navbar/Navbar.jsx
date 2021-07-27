@@ -1,10 +1,12 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import Logo from "../../assets/logo.png";
 import "./Navbar.scss";
+import { toast } from "react-toastify";
 //import { Nav, Container } from "react-bootstrap";
 
-function Navbar() {
+function Navbar({ userData, setUserData }) {
+  let history = useHistory();
   return (
     <>
       <nav className="navbar d-flex justify-content-between header navbar-expand-lg navbar-dark bg-dark">
@@ -26,15 +28,39 @@ function Navbar() {
         </button>
         <div className="collapse navbar-collapse" id="navbarScroll">
           <div className="logout">
-            <Link className="link m-3 btn btn-outline-danger" to="/profile">
-              Profile
-            </Link>
-            <Link className="link m-3 btn btn-outline-danger" to="/login">
-              Login
-            </Link>
-            <Link className="link m-3 btn btn-outline-danger" to="/register">
-              Register
-            </Link>
+            {userData && (
+              <>
+                <Link className="link m-3 btn btn-outline-danger" to="/profile">
+                  Profile
+                </Link>
+                <p
+                  onClick={() => {
+                    localStorage.removeItem("userDetails");
+                    toast.info("Logged Out Successfully");
+                    setUserData(null);
+                    history.push("/login");
+                  }}
+                  className="link m-3 btn btn-outline-danger"
+                  to="/profile"
+                >
+                  Log Out
+                </p>
+              </>
+            )}
+            {!userData && (
+              <>
+                {" "}
+                <Link className="link m-3 btn btn-outline-danger" to="/login">
+                  Login
+                </Link>
+                <Link
+                  className="link m-3 btn btn-outline-danger"
+                  to="/register"
+                >
+                  Register
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </nav>

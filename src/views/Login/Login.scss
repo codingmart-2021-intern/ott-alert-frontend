@@ -1,5 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Merriweather:wght@300&display=swap");
-
+$inputBackground: #333333;
+$diableBackground: #ddddddb9;
+$diableFontColor: #000000;
 .login {
   font-family: "Merriweather", serif;
   background-image: url("../../assets/background.jpg");
@@ -7,9 +9,9 @@
   background-size: cover;
   display: flex;
   align-items: center;
-  color:white;
-  h1{
-    color:white;
+  color: white;
+  h1 {
+    color: white;
   }
   // Mobile view
   @media only screen and (max-width: 700px) {
@@ -19,7 +21,6 @@
       padding: 16px;
       background-color: rgba(0, 0, 0, 0.7);
       border-radius: 3px;
-     
     }
     input[type="email"],
     input[type="password"] {
@@ -33,8 +34,6 @@
 
     input[type="email"]:focus,
     input[type="password"]:focus {
-      background-color: #ddd;
-      outline: none;
     }
     .btn {
       background-color: black;
@@ -51,7 +50,6 @@
     .btn:hover {
       opacity: 1;
     }
-    
   }
 
   // Web view
@@ -70,14 +68,11 @@
       padding: 10px;
       margin: 5px 0 22px 0;
       border: none;
-      background: #f1f1f1;
       border-radius: 5px;
     }
 
     input[type="email"]:focus,
     input[type="password"]:focus {
-      background-color: #ddd;
-      outline: none;
     }
 
     .btn {
@@ -94,6 +89,30 @@
 
     .btn:hover {
       opacity: 1;
+    }
+  }
+  input[type="email"] {
+    margin: 10px 0px;
+    background-color: $inputBackground;
+    padding: 15px 8px;
+    color: white;
+    border: none;
+    &:disabled {
+      background-color: $diableBackground;
+      color: $diableFontColor;
+      font-weight: bold;
+    }
+  }
+  input[type="password"] {
+    background-color: $inputBackground;
+    margin: 10px 0px;
+    padding: 15px 8px;
+    color: white;
+    border: none;
+    &:disabled {
+      background-color: $diableBackground;
+      color: $diableFontColor;
+      font-weight: bold;
     }
   }
 }

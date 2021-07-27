@@ -2,9 +2,13 @@ import React, { useState } from "react";
 import "./Login.scss";
 import validationService from "../../service/Validation";
 import Preloader from "../../components/Preloader/Preloader";
-import { Link } from "react-router-dom";
+import axios from "axios";
+import { Link, useHistory } from "react-router-dom";
+import { toast } from "react-toastify";
+import { userserviceurl } from "../../service/url";
 
-function Login() {
+function Login({ setUserData }) {
+  let history = useHistory();
   const [signinDetails, setsigninDetails] = useState({
     email: "",
     password: "",
@@ -29,7 +33,7 @@ function Login() {
     setsigninDetails(user);
     validate();
   };
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     validate();
     if (!signinDetails.email) {
@@ -40,6 +44,25 @@ function Login() {
       return;
     }
     console.log(signinDetails);
+    setLoading(true);
+    await axios
+      .post(`${userserviceurl}/login`, signinDetails)
+      .then((res) => {
+        if (res.status === 201) {
+          setLoading(false);
+          toast.success("Login Successfully");
+          setUserData(true);
+          localStorage.setItem("userDetails", JSON.stringify(res.data));
+          console.log(res.data);
+          history.push("/");
+        }
+      })
+      .catch((err) => {
+        setLoading(false);
+        if (err.response) {
+          toast.dark("Incorrect Credentials");
+        }
+      });
   };
   let content;
   if (loading) {
@@ -50,7 +73,7 @@ function Login() {
         <form className="si-form" onSubmit={handleSubmit}>
           <h1>Login</h1>
 
-          <label for="email">
+          <label htmlFor="email">
             <b>Email</b>
           </label>
           <input
@@ -65,7 +88,7 @@ function Login() {
             <span className="text-danger pb-3">{errors.email}</span>
           )}
           <br />
-          <label for="password">
+          <label htmlFor="password">
             <b>Password</b>
           </label>
           <input
@@ -88,7 +111,7 @@ function Login() {
               New User ?
             </Link>
             <Link
-              to="/forgetpassword"
+              to="/forgotpassword"
               style={{ textDecoration: "none", float: "right" }}
             >
               Forget Password ?
