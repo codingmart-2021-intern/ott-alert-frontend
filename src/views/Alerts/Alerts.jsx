@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Alerts.scss";
 import { Tabs, Space, Input, Select, Button } from "antd";
-import { genres, filter } from "../../service/data";
+import { genres } from "../../service/data";
 import Notify from "../../components/Notifycomp/Notify";
 import { toast } from "react-toastify";
 import { userserviceurl } from "../../service/url";
@@ -14,38 +14,7 @@ function Alerts() {
   const { Option } = Select;
 
   let userDetail = JSON.parse(localStorage.getItem("userDetails"));
-  const [alertDetail, setAlertDetail] = useState([
-    {
-      type: "movie",
-      choices: [
-        {
-          id: "1",
-          name: "1",
-        },
-        {
-          id: "1",
-          name: "1",
-        },
-      ],
-    },
-    {
-      type: "person",
-      choices: [
-        {
-          id: "1",
-          name: "Dhanush",
-        },
-        {
-          id: "2",
-          name: "Arya",
-        },
-        {
-          id: "3",
-          name: "Kamal",
-        },
-      ],
-    },
-  ]);
+  const [alertDetail, setAlertDetail] = useState();
   const [loading, setLoading] = useState(false);
 
   const onSearch = () => {
@@ -62,7 +31,7 @@ function Alerts() {
       .get(`${userserviceurl}/${userDetail?.id}`)
       .then((res) => {
         setLoading(false);
-        // setAlertDetail(res.data.alertDetail);
+        setAlertDetail(res.data.alertDetails);
         console.log(res);
       })
       .catch((err) => {
@@ -73,16 +42,35 @@ function Alerts() {
       });
   };
 
-  const deleteallFilters = async () => {
+  const deleteallFilters = async (type) => {
     setLoading(true);
+    let filterid = type === "people" ? alertDetail[0]?.id : alertDetail[1]?.id;
+    console.log(alertDetail[0]);
     await axios
-      .delete(`${userserviceurl}/delete/filters/$filterid/${userDetail?.id}`)
+      .delete(`${userserviceurl}/delete/filters/${filterid}/${userDetail?.id}`)
       .then((response) => {
-        setLoading(false);
-        toast.dark("Filters Cleared Successfully");
+      setLoading(false);
+        console.log(response);
+        fetchData();
+        toast.dark("Removed Successfully");
       })
       .catch((err) => {
         setLoading(false);
+        if (err.response) {
+          toast.dark("Error in Deletion");
+        }
+      });
+  };
+
+  const deleteIndividualFilter = async (filterid,choiceid) => {
+    await axios
+      .delete(`${userserviceurl}/delete/filters/choice/${userDetail?.id}/${filterid}/${choiceid}`)
+      .then((response) => {
+        fetchData();
+        console.log(response);
+        toast.dark("Filters Cleared Successfully");
+      })
+      .catch((err) => {
         if (err.response) {
           toast.dark("Error in Deletion");
         }
@@ -112,7 +100,6 @@ function Alerts() {
   useEffect(() => {
     fetchData();
   }, []);
-
   return (
     <div className="alertPage">
       {loading ? (
@@ -131,6 +118,9 @@ function Alerts() {
                     onSearch={onSearch}
                     className="fil-elements"
                   />
+                  <Button type="danger" className="m-2" onClick={()=>{deleteallFilters("people")}}>
+                    Clear All
+                  </Button>
                 </Space>
               </TabPane>
               <TabPane tab="Genre" key="2">
@@ -150,18 +140,20 @@ function Alerts() {
                 <Button type="primary" className="m-2">
                   Submit
                 </Button>
+                <Button type="danger" className="m-2" onClick={()=>{deleteallFilters("geners")}}>
+                  Clear All 
+                </Button>
               </TabPane>
             </Tabs>
           </div>
           <div className="card-alert">
             {alertDetail
-              ? alertDetail?.map((fil, ind) => <Notify key={ind} title={fil} />)
+              ? alertDetail?.map((details, ind) => {  
+                return details?.choices?.map((data,index)=><Notify key={ind+index} typeId={details.id} deleteIndividualFilter={deleteIndividualFilter} title={data} />)
+              })
               : "No Records found "}
           </div>
           <div>
-            <Button type="danger" className="m-2" onClick={deleteallFilters}>
-              Clear All Filters
-            </Button>
             <Button type="danger" className="m-2" onClick={saveFilters}>
               Save FIlters
             </Button>

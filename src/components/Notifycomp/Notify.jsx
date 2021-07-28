@@ -1,8 +1,9 @@
 import React from "react";
 import "./Notify.scss";
-function Notify({ title }) {
+function Notify( { title ,typeId, deleteIndividualFilter } ) {
   const deleteSelection = () => {
     console.log(title.id);
+    deleteIndividualFilter(typeId,title.id);
   };
   return (
     <span className="card card-notify" style={{ margin: "5px" }}>

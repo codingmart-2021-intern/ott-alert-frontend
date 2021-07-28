@@ -1,6 +1,7 @@
 import "./App.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar"
+import Preloader from "./components/Preloader/Preloader";
 import { useState } from "react"
 import Login from "./views/Login/Login";
 import Signup from "./views/Signup/Signup"
@@ -26,6 +27,7 @@ function App() {
           <Route path="/register" exact component={() => <Signup />} />
           <ProtectedRoute path="/profile" exact component={() => <Profile />} />
           <Route path="/forgotpassword" exact component={() => <ForgotPassword />} />
+          <Route path="/preloader" exact component={() => <Preloader />} />
         </Switch>
         <ToastContainer
           position="top-right"
