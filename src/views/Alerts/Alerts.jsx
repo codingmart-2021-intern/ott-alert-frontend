@@ -6,7 +6,6 @@ import Notify from "../../components/Notifycomp/Notify";
 import { toast } from "react-toastify";
 import { userserviceurl } from "../../service/url";
 import axios from "axios";
-import * as uuid from "uuid";
 import UUID from "uuid-int";
 import Preloader from "../../components/Preloader/Preloader";
 
