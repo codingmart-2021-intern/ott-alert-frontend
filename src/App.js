@@ -1,7 +1,6 @@
 import "./App.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar"
-import Preloader from "./components/Preloader/Preloader";
 import { useState } from "react"
 import Login from "./views/Login/Login";
 import Signup from "./views/Signup/Signup"

@@ -6,22 +6,74 @@ import Notify from "../../components/Notifycomp/Notify";
 import { toast } from "react-toastify";
 import { userserviceurl } from "../../service/url";
 import axios from "axios";
+import * as uuid from "uuid";
+import UUID from "uuid-int";
 import Preloader from "../../components/Preloader/Preloader";
 
 function Alerts() {
+
+// number  0 <= id <=511
+const id = 2;
+
+const generator = UUID(id);
+
   const { TabPane } = Tabs;
   const { Search } = Input;
   const { Option } = Select;
 
+  const sampleData = [
+    {
+        "type": "person",
+        "choices": []
+    },
+    {
+        "type": "geners",
+        "choices": []
+    }
+  ]
+
   let userDetail = JSON.parse(localStorage.getItem("userDetails"));
-  const [alertDetail, setAlertDetail] = useState();
+  const [alertDetail, setAlertDetail] = useState(sampleData);
+  const [selectValue, setSelectValue] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const onSearch = () => {
-    console.log("On search function");
+  const onSelect = (value,type) => {
+    if(value){
+      setAlertDetail((prev)=>{
+          let data = prev
+          let unId = String(generator.uuid());
+          if(type === "person"){
+            if(data[0]){
+              data[0].choices =[...data[0].choices,{
+                id:  Number(unId.substring(unId.length - 4)),
+                name:value,
+              }]
+            } else{
+             data[0] =  { 
+               "type": "person",
+                "choices": [{
+                  id:  Number(unId.substring(unId.length - 4)),
+                  name:value,
+                }]
+              }
+            }
+          }else{
+            if(data[1]){
+              data[1].choices=[...data[1].choices,value];
+            }else{
+             data[1] =  {
+                  "type": "geners",
+                  "choices": [value]
+              }
+            }
+          }
+          return data;
+      }); 
+    }
   };
+
   const handleChange = (value) => {
-    console.log(`selected ${value}`);
+    setSelectValue(genres.filter((gener)=>gener.id === value)[0])
   };
 
   const fetchData = async () => {
@@ -31,7 +83,7 @@ function Alerts() {
       .get(`${userserviceurl}/${userDetail?.id}`)
       .then((res) => {
         setLoading(false);
-        setAlertDetail(res.data.alertDetails);
+        setAlertDetail(res?.data?.alertDetails?.length ? res.data.alertDetails :sampleData);
         console.log(res.data);
       })
       .catch((err) => {
@@ -41,11 +93,10 @@ function Alerts() {
         }
       });
   };
-
+console.log(alertDetail);
   const deleteallFilters = async (type) => {
     setLoading(true);
-    let filterid = type === "people" ? alertDetail[0]?.id : alertDetail[1]?.id;
-    console.log(alertDetail[0]);
+    let filterid = alertDetail?.filter((data)=>data?.type === type)[0]?.id;
     await axios
       .delete(`${userserviceurl}/delete/filters/${filterid}/${userDetail?.id}`)
       .then((response) => {
@@ -79,10 +130,17 @@ function Alerts() {
 
   const saveFilters = async () => {
     setLoading(true);
-    console.log("Saving....", alertDetail);
+    console.log("Saving....");
+    console.log({
+      "alertDetails": alertDetail,
+    });
     await axios
       .post(`${userserviceurl}/save/filters/${userDetail?.id}`, {
         alertDetails: alertDetail,
+      },{
+        headers: {
+          Authorization: userDetail.token,
+        },
       })
       .then((res) => {
         setLoading(false);
@@ -101,7 +159,8 @@ function Alerts() {
     fetchData();
   }, []); 
   return (
-    <>{loading ?  <Preloader />
+    <>
+    {loading ?  <Preloader />
        : (
         <div className="alertPage">
           <div className=" card card-nav alert_navbar p-3">
@@ -110,13 +169,13 @@ function Alerts() {
                 <Space direction="vertical">
                   <Search
                     placeholder="Enter the Actor Name"
-                    allowClear
+                    allowClear 
                     enterButton="Submit"
                     size="large"
-                    onSearch={onSearch}
+                    onSearch={(value)=>onSelect(value,"person")}
                     className="fil-elements"
                   />
-                  <Button type="danger" className="m-2" onClick={()=>{deleteallFilters("people")}}>
+                  <Button type="danger" className="m-2" onClick={()=>{deleteallFilters("person")}}>
                     Clear All
                   </Button>
                 </Space>
@@ -129,13 +188,13 @@ function Alerts() {
                   className="fil-elements"
                 >
                   {genres.map((data, ind) => (
-                    <Option key={ind} disabled={ind === 0} value={data.name}>
+                    <Option key={ind} disabled={ind === 0} value={data.id}>
                       {data.name}
                     </Option>
                   ))}
                 </Select>
                 <br />
-                <Button type="primary" className="m-2">
+                <Button onClick={()=>{onSelect(selectValue,"gener")}} type="primary" className="m-2">
                   Submit
                 </Button>
                 <Button type="danger" className="m-2" onClick={()=>{deleteallFilters("geners")}}>
@@ -144,18 +203,22 @@ function Alerts() {
               </TabPane>
             </Tabs>
           </div>
-          <div className="card-alert">
-            {alertDetail?.length
-              ? alertDetail?.map((details, ind) => {  
-                return details?.choices?.map((data,index)=><Notify key={ind+index} typeId={details.id} deleteIndividualFilter={deleteIndividualFilter} title={data} />)
-              })
-              : <p className="h5 ">No Records Found</p>
-              }
-          </div>
-
-          <Button type="danger" className="m-2" onClick={saveFilters}>
-                  Save 
-          </Button>
+            <div className="wholeCard">
+                <div className="card-alert">
+                {
+                alertDetail[0]?.choices?.length
+                  ? alertDetail?.map((details, ind) => {  
+                    return details?.choices?.map((data,index)=><Notify key={ind+index} typeId={details.id} deleteIndividualFilter={deleteIndividualFilter} title={data} />)
+                  })
+                  : <p className="h5">No Records Found</p>
+                  }
+              </div>
+              {alertDetail[0]?.choices?.length && <div className="finalsave">
+                  <Button type="danger" className="m-2" onClick={saveFilters}>
+                          Save 
+                  </Button>
+              </div>}
+            </div>
         </div>
         )
     }
