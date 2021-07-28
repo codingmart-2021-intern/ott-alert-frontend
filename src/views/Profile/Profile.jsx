@@ -2,25 +2,17 @@ import React, { useState, useEffect } from "react";
 import validationService from "../../service/Validation";
 import Preloader from "../../components/Preloader/Preloader";
 import Avatar, { ConfigProvider } from "react-avatar";
-import { toast } from "react-toastify";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
+import { toast } from "react-toastify";
 import { userserviceurl } from "../../service/url";
 import "./profile.scss";
 
 function Profile() {
   let history = useHistory();
   const [edit, setEdit] = useState(false);
-  const [editPassword, setEditPassword] = useState(false);
   let userDetail = JSON.parse(localStorage.getItem("userDetails"));
   const [userDetails, setUserDetails] = useState(userDetail);
-  /* const [formdetails,setformdetails] = useState({
-  name:
-}); */
-  /* const [editUser, seteditUser] = useState({
-    email: userDetails.email,
-    phoneNumber: userDetails.phoneNumber,
-  }); */
   const [password, setPassword] = useState(null);
   const [errors, setErrors] = useState({
     name: "",
@@ -30,26 +22,25 @@ function Profile() {
   });
   const [loading, setLoading] = useState(false);
 
+  const fetchData = async () => {
+    console.log("getting");
+    await axios
+      .get(`${userserviceurl}/${userDetail?.id}`)
+      .then((res) => {
+        setLoading(false);
+        setUserDetails(res.data);
+        console.log(res);
+      })
+      .catch((err) => {
+        setLoading(false);
+        if (err.response) {
+          toast.dark("Incorrect Credentials");
+        }
+      });
+  };
   useEffect(() => {
-    const fetchData = async () => {
-      console.log("getting");
-      await axios
-        .get(`${userserviceurl}/${userDetail?.id}`)
-        .then((res) => {
-          if (res.status === 201) {
-            setLoading(false);
-            console.log(res);
-          }
-        })
-        .catch((err) => {
-          setLoading(false);
-          if (err.response) {
-            toast.dark("Incorrect Credentials");
-          }
-        });
-    };
     fetchData();
-  }, [userDetail?.id]);
+  }, []);
 
   const validate = () => {
     let error = {};
@@ -81,19 +72,22 @@ function Profile() {
     if (!errors.name && userDetails.name) {
       changeUserDetails();
     }
-    if (!errors.password && password) {
-      changeUserPassword();
-    }
   };
 
   const changeUserDetails = async () => {
     console.log("Prof chnge");
+    const profile = {
+      name: userDetails.name,
+      email: userDetails.email,
+      password: password,
+      phoneNumber: userDetails.phoneNumber,
+    };
+    console.log(profile, "toktn ", userDetail.token, "id", userDetails.id);
     await axios
-      .post(`${userserviceurl}/updateProfile/${userDetails.id}`, {
-        name: userDetails.name,
-        email: userDetails.email,
-        password: userDetails.password,
-        phoneNumber: userDetails.phoneNumber,
+      .post(`${userserviceurl}/updateProfile/${userDetails.id}`, profile, {
+        headers: {
+          Authorization: userDetail.token,
+        },
       })
       .then((res) => {
         setLoading(false);
@@ -109,26 +103,6 @@ function Profile() {
       });
   };
 
-  const changeUserPassword = async () => {
-    console.log("Pswd chnge");
-    await axios
-      .post(`${userserviceurl}/changePassword`, {
-        email: userDetails.email,
-        password: password,
-      })
-      .then((res) => {
-        setLoading(false);
-        toast.success("Password Changed Successfully");
-        console.log(res);
-        history.push("/");
-      })
-      .catch((err) => {
-        setLoading(false);
-        if (err.response) {
-          toast.dark("Incorrect Credentials");
-        }
-      });
-  };
   let content;
   if (loading) {
     content = <Preloader />;
@@ -141,7 +115,11 @@ function Profile() {
               <h4 className="register-header text-center">Profile</h4>
               <div className="profile-avatar">
                 <ConfigProvider colors={["red", "green", "royalblue"]}>
-                  <Avatar name={userDetails.name} round={true} align="center" />
+                  <Avatar
+                    name={userDetails?.name}
+                    round={true}
+                    align="center"
+                  />
                 </ConfigProvider>
               </div>
               <form onSubmit={onSubmitHandler}>
@@ -192,7 +170,7 @@ function Profile() {
                     </span>
                   )}
                 </div>
-                {edit && editPassword && (
+                {edit && (
                   <>
                     <div className="form-group">
                       <input
@@ -232,7 +210,7 @@ function Profile() {
                     <button
                       onClick={() => {
                         setEdit(!edit);
-                        setUserDetails(userDetail);
+                        fetchData();
                       }}
                       type="button"
                       className={`btn btn-${edit ? "danger" : "primary"} `}
@@ -242,18 +220,6 @@ function Profile() {
                   </div>
                 </div>
               </form>
-              {edit && (
-                <p
-                  className="text-capitalize m-2 cursorPointer text-light"
-                  onClick={() => {
-                    setEditPassword(!editPassword);
-                  }}
-                >
-                  {!editPassword
-                    ? "Change Password"
-                    : "Don't want to change password"}
-                </p>
-              )}
             </div>
           </div>
         </div>

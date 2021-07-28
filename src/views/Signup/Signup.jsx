@@ -199,7 +199,7 @@ function Signup() {
               <form onSubmit={onSubmitHandler}>
                 <div className="form-group">
                   <input
-                    type="email"
+                    type="text"
                     className="form-control"
                     placeholder="Username"
                     name="username"

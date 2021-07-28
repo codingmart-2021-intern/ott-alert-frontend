@@ -24,12 +24,11 @@ const genres = [
 const filter = [
   { id: 12, name: "Comedy" },
   { id: 13, name: "Adventure" },
-  { id: 12, name: "Comedy" },
-  { id: 12, name: "Comedy" },
-  { id: 13, name: "Adventure" },
-  { id: 12, name: "Comedy" },
-  { id: 13, name: "Adventure" },
-  { id: 12, name: "Comedy" },
-  { id: 13, name: "Adventure" },
+  { id: 10402, name: "Music" },
+  { id: 9648, name: "Mystery" },
+  { id: 10749, name: "Romance" },
+  { id: 878, name: "Science Fiction" },
+  { id: 10770, name: "TV Movie" },
+  { id: 53, name: "Thriller" },
 ];
 export { genres, filter };
