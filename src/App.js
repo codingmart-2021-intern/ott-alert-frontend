@@ -12,7 +12,6 @@ import { ToastContainer } from 'react-toastify';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ProtectedRoute from "./views/ProtectedRoute/ProtectedRoute";
-
 import 'react-toastify/dist/ReactToastify.css';
 import 'antd/dist/antd.css';
 function App() {
@@ -27,7 +26,6 @@ function App() {
           <Route path="/register" exact component={() => <Signup />} />
           <ProtectedRoute path="/profile" exact component={() => <Profile />} />
           <Route path="/forgotpassword" exact component={() => <ForgotPassword />} />
-          <Route path="/preloader" exact component={() => <Preloader />} />
         </Switch>
         <ToastContainer
           position="top-right"

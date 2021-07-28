@@ -32,7 +32,7 @@ function Alerts() {
       .then((res) => {
         setLoading(false);
         setAlertDetail(res.data.alertDetails);
-        console.log(res);
+        console.log(res.data);
       })
       .catch((err) => {
         setLoading(false);
@@ -86,7 +86,7 @@ function Alerts() {
       })
       .then((res) => {
         setLoading(false);
-        //setAlertDetail(res.data);
+        fetchData();
         console.log(res);
       })
       .catch((err) => {
@@ -99,13 +99,11 @@ function Alerts() {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, []); 
   return (
-    <div className="alertPage">
-      {loading ? (
-        <Preloader />
-      ) : (
-        <>
+    <>{loading ?  <Preloader />
+       : (
+        <div className="alertPage">
           <div className=" card card-nav alert_navbar p-3">
             <Tabs defaultActiveKey="1">
               <TabPane tab="Person" key="1">
@@ -147,20 +145,21 @@ function Alerts() {
             </Tabs>
           </div>
           <div className="card-alert">
-            {alertDetail
+            {alertDetail?.length
               ? alertDetail?.map((details, ind) => {  
                 return details?.choices?.map((data,index)=><Notify key={ind+index} typeId={details.id} deleteIndividualFilter={deleteIndividualFilter} title={data} />)
               })
-              : "No Records found "}
+              : <p className="h5 ">No Records Found</p>
+              }
           </div>
-          <div>
-            <Button type="danger" className="m-2" onClick={saveFilters}>
-              Save FIlters
-            </Button>
-          </div>
-        </>
-      )}
-    </div>
+
+          <Button type="danger" className="m-2" onClick={saveFilters}>
+                  Save 
+          </Button>
+        </div>
+        )
+    }
+    </>
   );
 }
 
